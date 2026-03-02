@@ -2,12 +2,56 @@ plugins {
 	id "io.spring.convention.root"
 }
 
-group = "org.springframework.security"
+group = projectGroup
 description = "Spring Authorization Server"
 
 if (hasProperty("buildScan")) {
 	buildScan {
 		termsOfServiceUrl = "https://gradle.com/terms-of-service"
 		termsOfServiceAgree = "yes"
+	}
+}
+
+allprojects {
+	repositories {
+		maven {
+			name = 'nexus'
+			url = nexusPublicUrl
+			allowInsecureProtocol = true
+			credentials {
+				username = nexusUsername
+				password = nexusPassword
+			}
+		}
+		if (version.endsWith('-SNAPSHOT')) {
+			maven {
+				name = 'nexusSnapshot'
+				url = nexusSnapshotUrl
+				allowInsecureProtocol = true
+				credentials {
+					username = nexusUsername
+					password = nexusPassword
+				}
+			}
+		}
+	}
+}
+
+// 配置发布仓库
+subprojects {
+	plugins.withType(MavenPublishPlugin) {
+		publishing {
+			repositories {
+				maven {
+					name = 'nexus'
+					url = project.version.toString().endsWith('-SNAPSHOT') ? nexusSnapshotUrl : nexusReleaseUrl
+					allowInsecureProtocol = true
+					credentials {
+						username = nexusUsername
+						password = nexusPassword
+					}
+				}
+			}
+		}
 	}
 }

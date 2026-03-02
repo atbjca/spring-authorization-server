@@ -37,9 +37,10 @@ public class SpringRootProjectPlugin implements Plugin<Project> {
 		PluginManager pluginManager = project.getPluginManager();
 		pluginManager.apply(BasePlugin.class);
 		pluginManager.apply(SpringNoHttpPlugin.class);
-		pluginManager.apply(SpringNexusPlugin.class);
+		// 禁用官方 OSSRH 和 Artifactory 发布插件，改用 build.gradle 中的 Nexus 私服配置
+		// pluginManager.apply(SpringNexusPlugin.class);
 		pluginManager.apply(SpringCheckProhibitedDependenciesLifecyclePlugin.class);
-		pluginManager.apply(SpringArtifactoryPlugin.class);
+		// pluginManager.apply(SpringArtifactoryPlugin.class);
 		pluginManager.apply(SpringSonarQubePlugin.class);
 
 		// Apply default repositories

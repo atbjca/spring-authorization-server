@@ -1,6 +1,6 @@
 # Spring Authorization Server CVE 修复 – APM Memory Root
 **Memory Strategy:** Dynamic-MD
-**Project Overview:** 在 spring-authorization-server 0.4.x 分支基础上创建 0.4.x-bjca-patch 分支，针对 CVE-2024-22258（PKCE 降级攻击）进行安全修复。修复包含完备中文注释、CVE 技术文档、测试用例，并维护 doc/REQUIREMENTS.md 作为修复进度跟踪。
+**Project Overview:** 在 spring-authorization-server 0.4.x 分支基础上创建 0.4.x-bjca-patch 分支，针对 CVE-2024-22258（PKCE 降级攻击）进行安全修复，并完成 Nexus 私服构建配置。修复包含完备中文注释、CVE 技术文档、测试用例，并维护 doc/REQUIREMENTS.md 作为修复进度跟踪。
 
 ## Phase 01 – 项目环境搭建 Summary
 * 成功确认 `0.4.x-bjca-patch` 分支基于最新 `origin/0.4.x`（commit `ee19c396`），分支已就绪。创建了 `doc/CVE/` 目录和 `doc/REQUIREMENTS.md` 文件，CVE-2024-22258 条目已添加并标记为"待修复"。
@@ -20,3 +20,11 @@
   - `.apm/Memory/Phase_02_CVE-2024-22258修复/Task_2_3_编写测试用例.md`
   - `.apm/Memory/Phase_02_CVE-2024-22258修复/Task_2_4_创建CVE文档并更新REQUIREMENTS.md`
   - `.apm/Memory/Phase_02_CVE-2024-22258修复/Task_2_5_用户确认并执行git_commit.md`
+
+## Phase 03 – 项目构建配置 Summary
+* 完成 Nexus 私服构建配置：修改 gradle.properties（添加 projectGroup、版本号改为 0.4.5-bjca-patch-SNAPSHOT）、settings.gradle（pluginManagement/dependencyResolutionManagement 添加 nexus）、build.gradle（group 引用变量 + allprojects/subprojects nexus 配置）、buildSrc/build.gradle（repositories 添加 nexus）。
+* 创建 Makefile：包含 clean/build/build-thin/install/deploy/stop/projects/tree 目标。
+* 配置结构验证通过（实际构建需在内网 Nexus 可达环境执行）。
+* Agents: Agent_BuildConfig
+* Logs:
+  - `.apm/Memory/Phase_03_项目构建配置/Task_3_all_构建配置.md`

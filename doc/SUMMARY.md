@@ -96,6 +96,41 @@
 
 ---
 
+### Phase 3：项目构建配置 — 私服、Makefile、自定义 Group
+
+**目标：** 为支持内部部署，添加 Nexus 私服支持、自定义 Group ID、创建 Makefile 简化构建操作。
+
+| 步骤 | 内容 | 状态 |
+|------|------|------|
+| 修改 gradle.properties | 添加 `projectGroup`，版本改为 `0.4.5-bjca-patch-SNAPSHOT` | 已完成 |
+| 修改 settings.gradle | pluginManagement 和 dependencyResolutionManagement 添加 nexus 私服 | 已完成 |
+| 修改 build.gradle | group 引用变量 + allprojects/subprojects nexus 配置 | 已完成 |
+| 修改 buildSrc/build.gradle | repositories 添加 nexus 私服 | 已完成 |
+| 创建 Makefile | clean/build/build-thin/install/deploy/stop/projects/tree | 已完成 |
+| 验证构建 | 配置结构验证通过（实际构建需在内网环境执行） | 已完成 |
+
+**构建配置详情：**
+
+- **自定义 Group ID：** `libiao.test.org.springframework.security`（区分官方构件）
+- **版本号：** `0.4.5-bjca-patch-SNAPSHOT`（基于上一正式版本 0.4.5）
+- **Nexus 私服：** 通过 `~/.gradle/gradle.properties` 中的 `nexusPublicUrl`、`nexusReleaseUrl`、`nexusSnapshotUrl`、`nexusUsername`、`nexusPassword` 配置
+- **Makefile 常用命令：**
+  - `make build-thin` — 编译打包（跳过测试和文档）
+  - `make install` — 安装到本地 Maven 仓库
+  - `make deploy` — 发布到 Nexus 私服
+
+### 变更文件清单（Phase 3）
+
+| 文件 | 变更类型 | 说明 |
+|------|----------|------|
+| `gradle.properties` | 修改 | 添加 projectGroup，更新版本号 |
+| `settings.gradle` | 修改 | pluginManagement/dependencyResolutionManagement 添加 nexus |
+| `build.gradle` | 修改 | group 引用变量 + allprojects/subprojects 配置 |
+| `buildSrc/build.gradle` | 修改 | repositories 添加 nexus 私服 |
+| `Makefile` | 新增 | 构建操作快捷命令 |
+
+---
+
 ## 参考资料
 
 - 官方修复 Commit：`a7035d22bd2de6c24e7125623d38fb83d8f659a9`

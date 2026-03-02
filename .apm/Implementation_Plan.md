@@ -1,7 +1,7 @@
 # Spring Authorization Server CVE 修复 – APM Implementation Plan
 **Memory Strategy:** Dynamic-MD
-**Last Modification:** Phase 2 全部完成 — CVE-2024-22258 修复已提交至 0.4.x-bjca-patch 分支（commit 25661fbf），包含代码修复、测试、中文文档。
-**Project Overview:** 在 spring-authorization-server 0.4.x 分支基础上创建 0.4.x-bjca-patch 分支，针对 CVE-2024-22258（PKCE 降级攻击）进行修复。修复包含完备的中文注释、CVE 文档（含官方修复方案及 commitId）、测试用例，并维护 doc/REQUIREMENTS.md。后续可能追加更多 CVE。
+**Last Modification:** Phase 3 全部完成 — 项目构建配置（Nexus 私服、Makefile、自定义 Group）已完成，配置结构验证通过。
+**Project Overview:** 在 spring-authorization-server 0.4.x 分支基础上创建 0.4.x-bjca-patch 分支，针对 CVE-2024-22258（PKCE 降级攻击）进行修复。修复包含完备的中文注释、CVE 文档（含官方修复方案及 commitId）、测试用例，并维护 doc/REQUIREMENTS.md。Phase 3 添加了 Nexus 私服构建配置、自定义 Group ID 和 Makefile。
 
 ## Phase 1: 项目环境搭建
 
@@ -70,3 +70,47 @@
 1. 使用 `git add` 暂存所有修改和新增的文件
 2. 向用户展示修复摘要（修改的文件列表、修复内容概述），请求 commit 确认
 3. 用户确认后，执行 `git commit`，commit message 使用中文描述修复内容
+
+## Phase 3: 项目构建配置 — 私服、Makefile、自定义 Group
+
+### Task 3.1 – 修改 gradle.properties
+**Objective:** 添加 projectGroup 和更新版本号。
+**Output:** 更新后的 gradle.properties。
+
+- 添加 `projectGroup=libiao.test.org.springframework.security`
+- 版本改为 `0.4.5-bjca-patch-SNAPSHOT`
+
+### Task 3.2 – 修改 settings.gradle
+**Objective:** 在 pluginManagement 和 dependencyResolutionManagement 中添加 nexus 私服。
+**Output:** 更新后的 settings.gradle。
+
+- pluginManagement.repositories 中 gradlePluginPortal() 之前添加 nexus 配置
+- dependencyResolutionManagement.repositories 中 mavenCentral() 之前添加 nexus 配置
+
+### Task 3.3 – 修改 build.gradle
+**Objective:** group 引用变量 + allprojects/subprojects 配置。
+**Output:** 更新后的 build.gradle。
+
+- group 改为引用 `projectGroup` 变量
+- 添加 allprojects 块配置 nexus 仓库（含 SNAPSHOT 仓库条件判断）
+- 添加 subprojects 块配置发布仓库（MavenPublishPlugin）
+
+### Task 3.4 – 修改 buildSrc/build.gradle
+**Objective:** repositories 添加 nexus 私服。
+**Output:** 更新后的 buildSrc/build.gradle。
+
+- 在 gradlePluginPortal() 之前添加 nexus 配置
+
+### Task 3.5 – 创建 Makefile
+**Objective:** 创建 Makefile 简化构建操作。
+**Output:** Makefile 文件。
+
+- 包含 clean/build/build-thin/install/deploy/stop/projects/tree 目标
+
+### Task 3.6 – 验证构建
+**Objective:** 验证配置结构正确。
+**Output:** 配置结构验证通过（实际构建需在内网环境执行）。
+
+### Task 3.7 – 更新文档并提交
+**Objective:** 更新 doc/SUMMARY.md、.apm/Implementation_Plan.md、.apm/Memory 日志。
+**Output:** 更新后的文档，git commit。
