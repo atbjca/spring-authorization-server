@@ -94,8 +94,19 @@ final class CodeVerifierAuthenticator {
 
 		String codeChallenge = (String) authorizationRequest.getAdditionalParameters()
 				.get(PkceParameterNames.CODE_CHALLENGE);
+
+		// CVE-2024-22258 修复：提前提取 codeVerifier，用于后续 PKCE 降级攻击检测。
+		// 原始代码将 codeVerifier 的提取放在 codeChallenge 校验之后，
+		// 导致当授权请求中缺少 code_challenge 时，即使令牌请求携带了 code_verifier，
+		// 也会因提前返回而跳过 PKCE 验证，形成 PKCE 降级攻击漏洞。
+		String codeVerifier = (String) parameters.get(PkceParameterNames.CODE_VERIFIER);
+
 		if (!StringUtils.hasText(codeChallenge)) {
-			if (registeredClient.getClientSettings().isRequireProofKey()) {
+			// CVE-2024-22258 修复：增加 codeVerifier 存在性检查。
+			// 当授权请求缺少 code_challenge，但令牌请求包含 code_verifier 时，
+			// 说明可能存在 PKCE 降级攻击（攻击者篡改授权请求移除了 code_challenge），
+			// 此时应拒绝请求以防止机密客户端的 PKCE 验证被绕过。
+			if (registeredClient.getClientSettings().isRequireProofKey() || StringUtils.hasText(codeVerifier)) {
 				throwInvalidGrant(PkceParameterNames.CODE_CHALLENGE);
 			} else {
 				if (this.logger.isTraceEnabled()) {
@@ -111,7 +122,6 @@ final class CodeVerifierAuthenticator {
 
 		String codeChallengeMethod = (String) authorizationRequest.getAdditionalParameters()
 				.get(PkceParameterNames.CODE_CHALLENGE_METHOD);
-		String codeVerifier = (String) parameters.get(PkceParameterNames.CODE_VERIFIER);
 		if (!codeVerifierValid(codeVerifier, codeChallenge, codeChallengeMethod)) {
 			throwInvalidGrant(PkceParameterNames.CODE_VERIFIER);
 		}
