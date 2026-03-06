@@ -39,3 +39,4 @@
 | 日期 | 类型 | 摘要 |
 |------|------|------|
 | 2026-03-05 | 构建/模块命名 | `settings.gradle` 动态重命名子项目后，同步修正 samples/docs 对 `project()` 路径的引用，并补齐 Authorization Server 模块的编译期依赖以保证构建通过。 |
+| 2026-03-06 | 依赖安全升级 | 将 `dependencies/spring-authorization-server-dependencies.gradle` 中 `com.fasterxml.jackson:jackson-bom` 从 `2.14.3` 升级到 `2.15.4`，用于修复已知安全漏洞风险。 |
