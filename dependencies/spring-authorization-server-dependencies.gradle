@@ -7,8 +7,10 @@ javaPlatform {
 }
 
 dependencies {
-	api platform("org.springframework:spring-framework-bom:$springFrameworkVersion")
-	api platform("org.springframework.security:spring-security-bom:$springSecurityVersion")
+	// 强制引用内部维护的 Spring Framework BOM 补丁版本
+	api platform("cn.bjca.footstone.bpring:bjca-footstone-bpring-framework-bom:$springFrameworkVersion")
+	// 强制引用内部维护的 Spring Security BOM 补丁版本
+	api platform("cn.bjca.footstone.bpring.security:bjca-footstone-bpring-security-bom:$springSecurityVersion")
 	api platform("com.fasterxml.jackson:jackson-bom:2.14.3")
 	constraints {
 		api "com.nimbusds:nimbus-jose-jwt:10.8"

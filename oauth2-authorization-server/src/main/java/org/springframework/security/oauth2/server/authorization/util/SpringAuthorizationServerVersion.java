@@ -16,7 +16,8 @@
 package org.springframework.security.oauth2.server.authorization.util;
 
 /**
- * Internal class used for serialization across Spring Authorization Server classes.
+ * Internal class used for serialization across Spring Authorization Server
+ * classes.
  *
  * @author Anoop Garlapati
  * @since 0.0.1
@@ -24,7 +25,9 @@ package org.springframework.security.oauth2.server.authorization.util;
 public final class SpringAuthorizationServerVersion {
 	private static final int MAJOR = 0;
 	private static final int MINOR = 4;
-	private static final int PATCH = 0;
+	// 特别说明：此处的 PATCH 位保持为 5 (即 0.4.5)，以维持与官方对应版本的运行时特征一致。
+	// 虽然 Maven 坐标中的版本号已提升至 0.4.16-nes.patch.1，但此处不建议同步修改，以免破坏针对 0.4.5 版本的逻辑检查。
+	private static final int PATCH = 5;
 
 	/**
 	 * Global Serialization value for Spring Authorization Server classes.
