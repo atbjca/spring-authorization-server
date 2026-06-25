@@ -1,5 +1,9 @@
 .PHONY: clean install deploy build build-thin stop projects tree help
 
+# 默认使用 Gradle Wrapper；可覆盖为本地安装，例如：
+#   make clean GRADLE=~/dev/gradle-7.6.3/bin/gradle
+GRADLE ?= ./gradlew
+
 help: ## 显示帮助信息
 	@echo ""
 	@echo "可用命令:"
@@ -14,25 +18,25 @@ help: ## 显示帮助信息
 	@echo ""
 
 clean: ## 清理构建产物
-	./gradlew clean
+	$(GRADLE) clean
 
 build: clean ## 编译打包（全量）
-	./gradlew build
+	$(GRADLE) build
 
 build-thin: clean ## 编译打包（精简版，跳过测试和文档）
-	./gradlew build -x test -x asciidoctor -x javadoc
+	$(GRADLE) build -x test -x asciidoctor -x javadoc
 
 install: clean ## 编译并安装到本地 Maven 仓库
-	./gradlew publishToMavenLocal -x test -x asciidoctor -x javadoc
+	$(GRADLE) publishToMavenLocal -x test -x asciidoctor -x javadoc
 
 deploy: clean ## 发布到 Nexus 私服
-	./gradlew publish -x test -x asciidoctor -x javadoc
+	$(GRADLE) publish -x test -x asciidoctor -x javadoc
 
 stop: ## 停止所有 Gradle Daemon
-	./gradlew --stop
+	$(GRADLE) --stop
 
 projects: ## 查看有效的项目
-	./gradlew projects
+	$(GRADLE) projects
 
 tree: ## 查看依赖树
-	./gradlew dependencies --configuration compileClasspath
+	$(GRADLE) dependencies --configuration compileClasspath

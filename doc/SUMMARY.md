@@ -85,14 +85,22 @@
 
 ## 后续计划
 
-当前分支 `0.4.x-bjca-patch` 已完成 CVE-2024-22258 的修复。如有新的 CVE 需要修复，可在此分支上继续开展后续 Phase，遵循相同的流程：
+当前分支 `0.4.x-bjca-patch` 已完成已知 CVE 的修复与文档维护。如有新的 CVE 需要修复，可在此分支上继续开展后续 Phase，遵循相同的流程：
 
 1. 研究官方修复方案
-2. Backport 代码修复并添加中文注释
-3. 编写测试用例
+2. Backport 代码修复并添加中文注释（源码级漏洞），或升级 BOM 约束（依赖级漏洞）
+3. 编写测试用例（源码级漏洞）或执行回归测试（依赖级漏洞）
 4. 创建 CVE 技术文档
-5. 更新 `REQUIREMENTS.md` 修复跟踪清单
+5. 更新 `doc/REQUIREMENTS.md` 修复跟踪清单
 6. 提交变更
+
+### 已知不在修复范围内的问题
+
+| 类别 | 说明 |
+|------|------|
+| CVE-2026-41008 / CVE-2026-22752 | 仅影响 Spring Authorization Server 1.3+ / 1.5+ 及 Spring Security 7.0，0.4.x 分支不包含相关代码路径 |
+| buildSrc 传递依赖 | Gson、Guava、XStream 等仅用于 Gradle 构建插件，不进入运行时产物；SCA 重命名后已不再报红 |
+| 内部 BOM 传递依赖 | `cn.bjca.footstone.bpring` 系列 Spring Framework/Security 补丁版本的 CVE 由对应内部仓库维护 |
 
 ---
 
@@ -131,7 +139,21 @@
 
 ---
 
-## 参考资料
+### Phase 4：依赖漏洞第二轮修复 — 2026-06-25
+
+**背景：** 3 月 OpenSCA 扫描（`opensca-spring-authorization-server-20260306_095853.html`）在 SCA 重命名前报告了 25 个 CVE；SCA 重命名后最新扫描已无报红，但直接依赖约束中仍有可升级项。
+
+| 依赖 | 旧版本 | 新版本 | 关联 CVE |
+|------|--------|--------|----------|
+| `jackson-bom` | 2.15.4 | 2.18.7 | CVE-2025-52999、GHSA-72hv-8253-57qq |
+| `nimbus-jose-jwt` | 10.8 | 10.9.1 | CVE-2023-52428、CVE-2025-53864 |
+| `bcprov-jdk18on` / `bcpkix-jdk18on` | （传递依赖） | 1.79 | CVE-2025-8916 |
+| `json-path` | 2.7.0 | 2.9.0 | CVE-2023-51074 |
+| `assertj-core` | 3.23.1 | 3.27.7 | CVE-2026-24400 |
+
+**文档：** 补齐 `doc/CVE/` 下 6 份技术文档（此前仅 CVE-2024-22258 有完整文档）。
+
+---
 
 - 官方修复 Commit：`a7035d22bd2de6c24e7125623d38fb83d8f659a9`
 - 官方仓库：[spring-projects/spring-authorization-server](https://github.com/spring-projects/spring-authorization-server)

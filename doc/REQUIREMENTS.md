@@ -10,8 +10,23 @@
 |----------|----------|------|----------|
 | CVE-2024-22258 | Moderate (CVSS 6.1) | 已修复 | 2026-03-02 |
 | CVE-2023-52428 | High (CVSS 7.5) | 已修复 | 2026-03-02 |
-| CVE-2025-53864 | — | 已修复 | 2026-03-02 |
+| CVE-2025-53864 | Medium (CVSS 5.8) | 已修复 | 2026-03-02 |
 | CVE-2025-8916 | — | 已修复 | 2026-03-02 |
+| CVE-2025-52999 | High | 已修复 | 2026-06-25 |
+| CVE-2023-51074 | Medium (CVSS 5.3) | 已修复 | 2026-06-25 |
+| CVE-2026-24400 | — | 已修复 | 2026-06-25 |
+
+### CVE 技术文档索引
+
+| CVE 编号 | 修复方式 | 文档 |
+|----------|----------|------|
+| CVE-2024-22258 | 源码 backport | [doc/CVE/CVE-2024-22258.md](CVE/CVE-2024-22258.md) |
+| CVE-2023-52428 | 依赖升级（nimbus-jose-jwt） | [doc/CVE/CVE-2023-52428.md](CVE/CVE-2023-52428.md) |
+| CVE-2025-53864 | 依赖升级（nimbus-jose-jwt） | [doc/CVE/CVE-2025-53864.md](CVE/CVE-2025-53864.md) |
+| CVE-2025-8916 | 依赖升级（bouncycastle） | [doc/CVE/CVE-2025-8916.md](CVE/CVE-2025-8916.md) |
+| CVE-2025-52999 | 依赖升级（jackson-bom） | [doc/CVE/CVE-2025-52999.md](CVE/CVE-2025-52999.md) |
+| CVE-2023-51074 | 依赖升级（json-path，测试依赖） | [doc/CVE/CVE-2023-51074.md](CVE/CVE-2023-51074.md) |
+| CVE-2026-24400 | 依赖升级（assertj-core，测试依赖） | [doc/CVE/CVE-2026-24400.md](CVE/CVE-2026-24400.md) |
 
 ## 追加：Fork & Rename（SCA 规避）需求
 
@@ -40,3 +55,4 @@
 |------|------|------|
 | 2026-03-05 | 构建/模块命名 | `settings.gradle` 动态重命名子项目后，同步修正 samples/docs 对 `project()` 路径的引用，并补齐 Authorization Server 模块的编译期依赖以保证构建通过。 |
 | 2026-03-06 | 依赖安全升级 | 将 `dependencies/spring-authorization-server-dependencies.gradle` 中 `com.fasterxml.jackson:jackson-bom` 从 `2.14.3` 升级到 `2.15.4`，用于修复已知安全漏洞风险。 |
+| 2026-06-25 | 依赖安全升级（第二轮） | 升级 `jackson-bom` 至 `2.18.7`、`nimbus-jose-jwt` 至 `10.9.1`、`json-path` 至 `2.9.0`、`assertj-core` 至 `3.27.7`，并显式约束 `bouncycastle` >= `1.79`。补齐 6 份 CVE 技术文档。 |

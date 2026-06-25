@@ -11,16 +11,22 @@ dependencies {
 	api platform("cn.bjca.footstone.bpring:bjca-footstone-bpring-framework-bom:$springFrameworkVersion")
 	// 强制引用内部维护的 Spring Security BOM 补丁版本
 	api platform("cn.bjca.footstone.bpring.security:bjca-footstone-bpring-security-bom:$springSecurityVersion")
-	api platform("com.fasterxml.jackson:jackson-bom:2.15.4")
+	// 2.18.7：修复 CVE-2025-52999（嵌套深度）、GHSA-72hv-8253-57qq（async maxNumberLength）等已知 Jackson 漏洞
+	api platform("com.fasterxml.jackson:jackson-bom:2.18.7")
 	constraints {
-		api "com.nimbusds:nimbus-jose-jwt:10.8"
+		api "com.nimbusds:nimbus-jose-jwt:10.9.1"
+		// CVE-2025-8916：nimbus-jose-jwt 传递依赖的 Bouncy Castle 需 >= 1.79
+		api "org.bouncycastle:bcprov-jdk18on:1.79"
+		api "org.bouncycastle:bcpkix-jdk18on:1.79"
 		api "javax.servlet:javax.servlet-api:4.0.1"
 		api "org.junit.jupiter:junit-jupiter:5.9.3"
-		api "org.assertj:assertj-core:3.23.1"
+		// CVE-2026-24400：AssertJ isXmlEqualTo XXE 漏洞，仅影响测试依赖
+		api "org.assertj:assertj-core:3.27.7"
 		api "org.mockito:mockito-core:4.8.1"
 		api "com.squareup.okhttp3:mockwebserver:4.10.0"
 		api "com.squareup.okhttp3:okhttp:4.10.0"
-		api "com.jayway.jsonpath:json-path:2.7.0"
+		// CVE-2023-51074：json-path Criteria.parse 栈溢出，仅用于测试
+		api "com.jayway.jsonpath:json-path:2.9.0"
 		api "org.hsqldb:hsqldb:2.5.2"
 	}
 }
