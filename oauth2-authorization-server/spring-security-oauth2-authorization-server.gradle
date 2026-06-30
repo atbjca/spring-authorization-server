@@ -3,24 +3,28 @@ plugins {
 }
 
 dependencies {
-	management platform(project(":spring-authorization-server-dependencies"))
+	// 内部项目依赖引用：settings.gradle 已重命名 artifactId，此处须使用重命名后的 project 路径
+	management platform(project(":bjca-footstone-bpring-security-spring-authorization-server-dependencies"))
 
-	api "org.springframework.security:spring-security-config"
-	api "org.springframework.security:spring-security-web"
-	api "org.springframework.security:spring-security-oauth2-core"
-	api "org.springframework.security:spring-security-oauth2-jose"
-	api "org.springframework.security:spring-security-oauth2-resource-server"
-	api("org.springframework:spring-core") {
+	// 批量替换为内部补丁版本坐标，确保编译和运行时均使用已修复漏洞的本地制品
+	api "cn.bjca.footstone.bpring.security:bjca-footstone-bpring-security-config"
+	api "cn.bjca.footstone.bpring.security:bjca-footstone-bpring-security-web"
+	api "cn.bjca.footstone.bpring.security:bjca-footstone-bpring-security-oauth2-core"
+	api "cn.bjca.footstone.bpring.security:bjca-footstone-bpring-security-oauth2-jose"
+	api "cn.bjca.footstone.bpring.security:bjca-footstone-bpring-security-oauth2-resource-server"
+	api platform("cn.bjca.footstone.bpring:bjca-footstone-bpring-framework-bom:$springFrameworkVersion")
+	api platform("cn.bjca.footstone.bpring.security:bjca-footstone-bpring-security-bom:$springSecurityVersion")
+	api("cn.bjca.footstone.bpring:bjca-footstone-bpring-core") {
 		exclude group: "commons-logging", module: "commons-logging"
 	}
 	api "com.nimbusds:nimbus-jose-jwt"
 	api "com.fasterxml.jackson.core:jackson-databind"
 
 	optional "com.fasterxml.jackson.datatype:jackson-datatype-jsr310"
-	optional "org.springframework:spring-jdbc"
+	optional "cn.bjca.footstone.bpring:bjca-footstone-bpring-jdbc"
 
-	testImplementation "org.springframework.security:spring-security-test"
-	testImplementation "org.springframework:spring-webmvc"
+	testImplementation "cn.bjca.footstone.bpring.security:bjca-footstone-bpring-security-test"
+	testImplementation "cn.bjca.footstone.bpring:bjca-footstone-bpring-webmvc"
 	testImplementation "org.bouncycastle:bcpkix-jdk18on"
 	testImplementation "org.bouncycastle:bcprov-jdk18on"
 	testImplementation "org.junit.jupiter:junit-jupiter"

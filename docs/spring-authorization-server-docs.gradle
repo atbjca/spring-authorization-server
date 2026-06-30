@@ -80,7 +80,7 @@ dependencies {
 	}
 	implementation "redis.clients:jedis"
 	implementation "org.springframework:spring-webflux"
-	implementation project(":spring-security-oauth2-authorization-server")
+	implementation project(":bjca-footstone-bpring-security-oauth2-authorization-server")
 	runtimeOnly "com.h2database:h2"
 	testImplementation "org.springframework.boot:spring-boot-starter-test"
 	testImplementation "org.springframework.security:spring-security-test"

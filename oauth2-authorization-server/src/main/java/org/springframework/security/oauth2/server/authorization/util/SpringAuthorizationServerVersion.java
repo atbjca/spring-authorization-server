@@ -27,6 +27,8 @@ public final class SpringAuthorizationServerVersion {
 
 	private static final int MINOR = 5;
 
+	// 特别说明：此处 PATCH 保持为 0，以维持与官方 1.5.x 序列化特征一致。
+	// Maven 坐标版本为 1.5.8-nes.patch.1-SNAPSHOT，但不宜同步修改此处，以免破坏运行时版本检查逻辑。
 	private static final int PATCH = 0;
 
 	/**

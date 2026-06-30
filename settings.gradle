@@ -1,5 +1,14 @@
 pluginManagement {
 	repositories {
+		maven {
+			name = 'nexus'
+			url = nexusPublicUrl
+			allowInsecureProtocol = true
+			credentials {
+				username = nexusUsername
+				password = nexusPassword
+			}
+		}
 		gradlePluginPortal()
 	}
 }
@@ -10,6 +19,15 @@ plugins {
 
 dependencyResolutionManagement {
 	repositories {
+		maven {
+			name = 'nexus'
+			url = nexusPublicUrl
+			allowInsecureProtocol = true
+			credentials {
+				username = nexusUsername
+				password = nexusPassword
+			}
+		}
 		mavenCentral()
 	}
 }
@@ -28,25 +46,52 @@ def buildFiles = fileTree(rootDir) {
 buildFiles.forEach { buildFile ->
 	def isDefaultName = buildFile.name == "build.gradle" || buildFile.name == "build.gradle.kts"
 	def isKotlin = buildFile.name.endsWith ".kts"
+	def projectName
+	def projectPath
 	if (isDefaultName) {
 		def buildFilePath = buildFile.parentFile.absolutePath
-		def projectPath = buildFilePath.replace((String) rootDir.absolutePath, "").replace(File.separator, ":")
+		projectPath = buildFilePath.replace((String) rootDir.absolutePath, "").replace(File.separator, ":")
 		include projectPath
+		projectName = findProject(projectPath).name
 	} else {
-		def projectName
 		if (isKotlin) {
 			projectName = buildFile.name.replace(".gradle.kts", "")
 		} else {
 			projectName = buildFile.name.replace(".gradle", "")
 		}
+		projectPath = ":$projectName"
 
+		def scaName = projectName
+		if (scaName.startsWith("spring-security-")) {
+			scaName = scaName.substring("spring-security-".length())
+		}
+		def renamedPath = ":bjca-footstone-bpring-security-" + scaName
+		def existingRenamed = findProject(renamedPath)
+		if (existingRenamed != null) {
+			// 与上游一致：docs 示例与正式 samples 共用模块名，仅更新 projectDir
+			existingRenamed.projectDir = buildFile.parentFile
+			existingRenamed.buildFileName = buildFile.name
+			return
+		}
 
-		def projectPath = ":$projectName"
 		include projectPath
+	}
 
-		def project = findProject(projectPath)
-		project.name = projectName
-		project.projectDir = buildFile.parentFile
-		project.buildFileName = buildFile.name
+	// SCA 规避核心逻辑：动态修改子项目在 Gradle 中的名称，从而影响生成的 Maven ArtifactId
+	def proj = findProject(projectPath)
+	if (proj && proj != rootProject) {
+		def newName = projectName
+		// 规则：如果原名以 "spring-security-" 开头，则截断该前缀以符合新的 artifactId 命名约定
+		if (newName.startsWith("spring-security-")) {
+			newName = newName.substring("spring-security-".length())
+		}
+		// 统一添加内部前缀，确保生成的 POM 文件中 artifactId 转为 bjca-footstone-bpring-security-...
+		proj.name = "bjca-footstone-bpring-security-" + newName
+
+		// 对于非标准结构的模块（如指定了 buildFileName），恢复其项目目录和构建文件配置
+		if (!isDefaultName) {
+			proj.projectDir = buildFile.parentFile
+			proj.buildFileName = buildFile.name
+		}
 	}
 }

@@ -1,23 +1,58 @@
 plugins {
 	id "io.spring.convention.root"
-	id "io.spring.security.release" version "1.0.15"
 }
 
-group = "org.springframework.security"
+group = projectGroup
 description = "Spring Authorization Server"
-
-springRelease {
-	repositoryOwner = "spring-projects"
-	weekOfMonth = 3
-	dayOfWeek = 2
-	referenceDocUrl = "https://docs.spring.io/spring-authorization-server/reference/{version}/index.html"
-	apiDocUrl = "https://docs.spring.io/spring-authorization-server/reference/{version}/api/java/index.html"
-	replaceSnapshotVersionInReferenceDocUrl = true
-}
 
 develocity {
 	buildScan {
 		termsOfUseUrl = 'https://gradle.com/help/legal-terms-of-use'
 		termsOfUseAgree = 'yes'
+	}
+}
+
+allprojects {
+	repositories {
+		maven {
+			name = 'nexus'
+			url = nexusPublicUrl
+			allowInsecureProtocol = true
+			credentials {
+				username = nexusUsername
+				password = nexusPassword
+			}
+		}
+		if (version.endsWith('-SNAPSHOT')) {
+			maven {
+				name = 'nexusSnapshot'
+				url = nexusSnapshotUrl
+				allowInsecureProtocol = true
+				credentials {
+					username = nexusUsername
+					password = nexusPassword
+				}
+			}
+		}
+		mavenCentral()
+	}
+}
+
+// 配置发布到 Nexus 私服
+subprojects {
+	plugins.withType(MavenPublishPlugin) {
+		publishing {
+			repositories {
+				maven {
+					name = 'nexus'
+					url = project.version.toString().endsWith('-SNAPSHOT') ? nexusSnapshotUrl : nexusReleaseUrl
+					allowInsecureProtocol = true
+					credentials {
+						username = nexusUsername
+						password = nexusPassword
+					}
+				}
+			}
+		}
 	}
 }

@@ -9,9 +9,19 @@ java {
 }
 
 repositories {
+	// buildSrc 插件优先从公共仓库解析，避免 Nexus 超时阻塞构建
 	gradlePluginPortal()
 	mavenCentral()
 	maven { url "https://repo.spring.io/plugins-release/" }
+	maven {
+		name = 'nexus'
+		url = nexusPublicUrl
+		allowInsecureProtocol = true
+		credentials {
+			username = nexusUsername
+			password = nexusPassword
+		}
+	}
 }
 
 dependencies {

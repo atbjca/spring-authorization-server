@@ -7,19 +7,25 @@ javaPlatform {
 }
 
 dependencies {
-	api platform(libs.org.springframework.spring.framework.bom)
-	api platform(libs.org.springframework.security.spring.security.bom)
+	// 强制引用内部维护的 Spring Framework BOM 补丁版本
+	api platform("cn.bjca.footstone.bpring:bjca-footstone-bpring-framework-bom:$springFrameworkVersion")
+	// 强制引用内部维护的 Spring Security BOM 补丁版本
+	api platform("cn.bjca.footstone.bpring.security:bjca-footstone-bpring-security-bom:$springSecurityVersion")
+	// 2.18.8：修复 CVE-2025-52999 等已知 Jackson 漏洞（与上游 1.5.x 对齐）
 	api platform(libs.com.fasterxml.jackson.jackson.bom)
 	constraints {
 		api libs.com.nimbusds.nimbus.jose.jwt
-		api libs.jakarta.servlet.jakarta.servlet.api
+		// CVE-2025-8916：nimbus-jose-jwt 传递依赖的 Bouncy Castle 需 >= 1.79
 		api libs.org.bouncycastle.bcpkix.jdk18on
 		api libs.org.bouncycastle.bcprov.jdk18on
+		api libs.jakarta.servlet.jakarta.servlet.api
 		api libs.org.junit.jupiter.junit.jupiter
+		// CVE-2026-24400：AssertJ isXmlEqualTo XXE 漏洞，仅影响测试依赖
 		api libs.org.assertj.assertj.core
 		api libs.org.mockito.mockito.core
 		api libs.com.squareup.okhttp3.mockwebserver
 		api libs.com.squareup.okhttp3.okhttp
+		// CVE-2023-51074：json-path Criteria.parse 栈溢出，仅用于测试
 		api libs.com.jayway.jsonpath.json.path
 		api libs.org.hsqldb.hsqldb
 	}

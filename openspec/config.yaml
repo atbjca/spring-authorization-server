@@ -1,0 +1,19 @@
+schema: spec-driven
+
+# 1.5.x-bjca-patch 项目上下文：Spring Authorization Server 内部安全补丁分支
+context: |
+  技术栈：Java 17+、Gradle 8.x、Spring Framework 6.2.x、Spring Security 6.5.x
+  分支：1.5.x-bjca-patch（基于 origin/1.5.x / 1.5.8）
+  构建：Makefile + 本地 ~/dev/gradle-8.14.5，发布到 Nexus 私服
+  约束：不改 package/类名；通过 GAV 重命名规避 SCA；注释优先中文
+  内部 BOM：
+    cn.bjca.footstone.bpring:bjca-footstone-bpring-framework-bom:6.2.19-nes.patch.1-SNAPSHOT
+    cn.bjca.footstone.bpring.security:bjca-footstone-bpring-security-bom:6.5.11-nes.patch.1-SNAPSHOT
+
+rules:
+  proposal:
+    - 变更前须做影响分析，列出受影响模块与风险
+    - 源码级 CVE 须先查上游是否已修复，避免重复 backport
+  tasks:
+    - 后端变更遵循 TDD：先写测试再改业务逻辑
+    - 任务完成后同步更新 doc/ 下文档
