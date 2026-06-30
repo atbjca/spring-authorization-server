@@ -1,0 +1,4 @@
+status: archived
+completed: 2026-06-30
+commit: 048dad6a
+summary: 统一 Gradle Wrapper 策略，添加 setup-gradle 支持
