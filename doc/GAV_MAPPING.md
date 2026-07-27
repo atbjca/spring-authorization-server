@@ -6,8 +6,7 @@
 
 | 原始模块 (artifactId)                           | 新模块 (artifactId)                                                         | 新 GroupId                            | 新 Version                     |
 | :---------------------------------------------- | :-------------------------------------------------------------------------- | :------------------------------------ | :----------------------------- |
-| `spring-security-oauth2-authorization-server` | `bjca-footstone-bpring-security-oauth2-authorization-server`              | `cn.bjca.footstone.bpring.security` | `0.4.5-nes.patch.1-SNAPSHOT` |
-| `spring-authorization-server-dependencies`    | `bjca-footstone-bpring-security-spring-authorization-server-dependencies` | `cn.bjca.footstone.bpring.security` | `0.4.5-nes.patch.1-SNAPSHOT` |
+| `spring-security-oauth2-authorization-server` | `bjca-footstone-bpring-security-oauth2-authorization-server`              | `cn.bjca.footstone.bpring.security` | `0.4.5-nes.patch.1` |
 
 > [!NOTE]
 > 在本项目的 `settings.gradle` 中，模块名已动态映射。
@@ -33,6 +32,23 @@
 
 | 原始 GroupId            | 原始 ArtifactId 前缀 | 新 GroupId                   | 新 ArtifactId 前缀         | 新 Version                      |
 | :---------------------- | :------------------- | :--------------------------- | :------------------------- | :------------------------------ |
-| `org.springframework` | `spring-`          | `cn.bjca.footstone.bpring` | `bjca-footstone-bpring-` | `5.3.39-nes.patch.1-SNAPSHOT` |
+| `org.springframework` | `spring-`          | `cn.bjca.footstone.bpring` | `bjca-footstone-bpring-` | `5.3.39-nes.patch.1` |
 
-例如：`org.springframework:spring-core` → `cn.bjca.footstone.bpring:bjca-footstone-bpring-core:5.3.39-nes.patch.1-SNAPSHOT`
+例如：`org.springframework:spring-core` → `cn.bjca.footstone.bpring:bjca-footstone-bpring-core:5.3.39-nes.patch.1`
+
+Spring Security 依赖由 BOM
+`cn.bjca.footstone.bpring.security:bjca-footstone-bpring-security-bom:5.8.16-nes.patch.1`
+统一约束。两个上游 BOM 均必须从 Nexus RELEASE 解析，禁止回退到内部 SNAPSHOT。
+
+## 4. 发布与验证约束
+
+- 完整发布集合只有上表中的 Authorization Server JAR，无排除项。`dependencies` 工程仅用于构建约束，未应用 `maven-publish`，不产生 RELEASE BOM。
+- Nexus RELEASE 地址：`http://192.168.131.36:8088/repository/releases`。
+- 推荐增量本地发布命令：
+
+  ```shell
+  JAVA_TOOL_OPTIONS=-Dfile.encoding=UTF-8 GRADLE_OPTS='-Xmx3g -Dfile.encoding=UTF-8 -Dorg.gradle.workers.max=3' ./gradlew publishToMavenLocal -x test -x asciidoctor -x javadoc --max-workers=3
+  ```
+
+- 本地发布后必须扫描生成的 POM，确认所有 `cn.bjca.footstone` 依赖均为 RELEASE。
+- 正式部署前必须确认目标 GAV 在 Nexus RELEASE 中完全不存在；正式部署由协调主会话串行执行。

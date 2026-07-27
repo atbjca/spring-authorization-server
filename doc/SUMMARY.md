@@ -1,5 +1,31 @@
 # Spring Authorization Server 0.4.x 安全补丁 — 阶段性总结
 
+## RELEASE 0.4.5-nes.patch.1
+
+当前发布版本为 `0.4.5-nes.patch.1`，目标仓库为 Nexus RELEASE：
+`http://192.168.131.36:8088/repository/releases`。
+
+完整发布集合：
+
+| 类型 | GAV |
+|------|-----|
+| JAR | `cn.bjca.footstone.bpring.security:bjca-footstone-bpring-security-oauth2-authorization-server:0.4.5-nes.patch.1` |
+
+`dependencies` 工程只提供构建约束，未应用 `maven-publish`，因此不生成 RELEASE BOM。
+
+内部上游仅允许使用已发布的 RELEASE：
+
+- Spring Framework BOM：`cn.bjca.footstone.bpring:bjca-footstone-bpring-framework-bom:5.3.39-nes.patch.1`
+- Spring Security BOM：`cn.bjca.footstone.bpring.security:bjca-footstone-bpring-security-bom:5.8.16-nes.patch.1`
+
+本组件没有发布排除项。推荐使用以下增量命令生成本地 Maven 制品，不执行 `clean`，也不重复运行测试：
+
+```shell
+JAVA_TOOL_OPTIONS=-Dfile.encoding=UTF-8 GRADLE_OPTS='-Xmx3g -Dfile.encoding=UTF-8 -Dorg.gradle.workers.max=3' ./gradlew publishToMavenLocal -x test -x asciidoctor -x javadoc --max-workers=3
+```
+
+部署前必须扫描生成的 POM，确认不存在内部 SNAPSHOT，并确认上述目标 GAV 在 Nexus RELEASE 中不存在。部署只能由协调主会话从已复核的 RELEASE commit 执行一次。
+
 ## 项目概述
 
 **项目目标：** 在 Spring Authorization Server 0.4.x 分支基础上，针对已知 CVE 漏洞进行安全修复，生成可用于内部部署的安全补丁分支。

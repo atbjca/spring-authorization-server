@@ -8,6 +8,28 @@ The Spring Authorization Server project, led by the https://spring.io/projects/s
 
 This project replaces the Authorization Server support provided by https://spring.io/projects/spring-security-oauth/[Spring Security OAuth].
 
+== NES RELEASE 0.4.5-nes.patch.1
+
+This branch prepares the immutable internal RELEASE `0.4.5-nes.patch.1` for the Nexus `releases` repository at `http://192.168.131.36:8088/repository/releases`.
+
+Published coordinate:
+
+* `cn.bjca.footstone.bpring.security:bjca-footstone-bpring-security-oauth2-authorization-server:0.4.5-nes.patch.1` (JAR)
+
+Required internal RELEASE dependencies:
+
+* `cn.bjca.footstone.bpring:bjca-footstone-bpring-framework-bom:5.3.39-nes.patch.1`
+* `cn.bjca.footstone.bpring.security:bjca-footstone-bpring-security-bom:5.8.16-nes.patch.1`
+
+There are no publication exclusions. To prepare all publications incrementally in the local Maven repository without cleaning or rerunning tests:
+
+[source,shell]
+----
+JAVA_TOOL_OPTIONS=-Dfile.encoding=UTF-8 GRADLE_OPTS='-Xmx3g -Dfile.encoding=UTF-8 -Dorg.gradle.workers.max=3' ./gradlew publishToMavenLocal -x test -x asciidoctor -x javadoc --max-workers=3
+----
+
+Before deployment, scan the generated POM for internal SNAPSHOT references and verify that the target GAV is absent from Nexus RELEASE. The internal dependencies project configures the build platform but does not apply `maven-publish`, so it is not a release publication. Deployment is coordinator-controlled and must run only once from the reviewed release commit.
+
 == Feature Planning
 This project uses https://docs.github.com/en/issues/planning-and-tracking-with-projects/learning-about-projects/about-projects[GitHub Projects] to prioritize the feature roadmap and help organize the project plan.
 The project board can be accessed https://github.com/orgs/spring-projects/projects/8[here].
