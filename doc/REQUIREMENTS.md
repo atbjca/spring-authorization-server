@@ -3,7 +3,7 @@
 ## 概述
 
 本文档跟踪 `1.5.x-bjca-patch` 分支的安全修复与依赖升级进度。  
-工作分支基于 `origin/1.5.x`（Release 1.5.8），自定义版本号为 `1.5.8-nes.patch.1-SNAPSHOT`。
+工作分支基于 `origin/1.5.x`（Release 1.5.8），自定义 RELEASE 版本号为 `1.5.8-nes.patch.1`。
 
 ## CVE 修复清单
 
@@ -34,10 +34,10 @@
 
 | 组件 | 坐标 |
 |------|------|
-| Spring Framework BOM | `cn.bjca.footstone.bpring:bjca-footstone-bpring-framework-bom:6.2.19-nes.patch.1-SNAPSHOT` |
-| Spring Security BOM | `cn.bjca.footstone.bpring.security:bjca-footstone-bpring-security-bom:6.5.11-nes.patch.1-SNAPSHOT` |
+| Spring Framework BOM | `cn.bjca.footstone.bpring:bjca-footstone-bpring-framework-bom:6.2.19-nes.patch.1` |
+| Spring Security BOM | `cn.bjca.footstone.bpring.security:bjca-footstone-bpring-security-bom:6.5.11-nes.patch.1` |
 | 本项目 groupId | `cn.bjca.footstone.bpring.security` |
-| 本项目 version | `1.5.8-nes.patch.1-SNAPSHOT` |
+| 本项目 version | `1.5.8-nes.patch.1` |
 
 详细 GAV 映射见 [doc/GAV_MAPPING.md](GAV_MAPPING.md)。
 

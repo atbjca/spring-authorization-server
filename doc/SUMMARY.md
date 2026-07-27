@@ -6,7 +6,7 @@
 
 **工作分支：** `1.5.x-bjca-patch`（基于 `origin/1.5.x` / Release 1.5.8）
 
-**自定义版本：** `1.5.8-nes.patch.1-SNAPSHOT`
+**自定义版本：** `1.5.8-nes.patch.1` RELEASE
 
 ## 快速入门（Quick Start）
 
@@ -43,14 +43,14 @@ GRADLE_USER_HOME=~/Downloads/DELETE/tmp/gradle-home make build-thin
 
 ### 1. 获取制品
 
-从 Nexus snapshots 仓库引入：
+从 Nexus releases 仓库引入：
 
 ```text
-cn.bjca.footstone.bpring.security:bjca-footstone-bpring-security-oauth2-authorization-server:1.5.8-nes.patch.1-SNAPSHOT
-cn.bjca.footstone.bpring.security:bjca-footstone-bpring-security-spring-authorization-server-dependencies:1.5.8-nes.patch.1-SNAPSHOT
+cn.bjca.footstone.bpring.security:bjca-footstone-bpring-security-oauth2-authorization-server:1.5.8-nes.patch.1
 ```
 
-须同时 import 内部 Spring Framework / Security BOM（见 GAV_MAPPING）。
+须同时 import 已在 Nexus RELEASE 仓库验证的 Spring Framework
+`6.2.19-nes.patch.1` 和 Spring Security `6.5.11-nes.patch.1` BOM（见 GAV_MAPPING）。
 
 ### 2. 与官方版的差异
 
@@ -63,10 +63,13 @@ cn.bjca.footstone.bpring.security:bjca-footstone-bpring-security-spring-authoriz
 
 ### 3. 发布流程
 
-1. 在 `1.5.x-bjca-patch` 分支完成变更与测试
-2. `make build` 全量验证（CI 推荐）
-3. `make deploy` 发布 SNAPSHOT 到 Nexus
-4. 通知下游更新 GAV（参考 GAV_MAPPING）
+1. 在 `1.5.x-bjca-patch` 分支完成 RELEASE 版本与内部依赖准备
+2. 不执行 `clean` 或重复全量测试，运行增量 `publishToMavenLocal`
+3. 扫描全部生成 POM，并完成最小下游消费验证
+4. 核对全部目标 GAV 在 Nexus RELEASE 中不存在
+5. 仅由协调主会话执行一次 RELEASE 部署，并验证远程 POM/制品/校验和
+
+本版本无显式发布排除项。Git 标签只能在 Nexus 验证完成后创建。
 
 ### 4. 约束原则（红线）
 

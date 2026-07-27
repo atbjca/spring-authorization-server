@@ -40,6 +40,28 @@ Please see our https://github.com/spring-projects/.github/blob/main/CODE_OF_COND
 == Downloading Artifacts
 See https://github.com/spring-projects/spring-framework/wiki/Spring-Framework-Artifacts[downloading Spring artifacts] for Maven repository information.
 
+=== NES RELEASE
+The NES-maintained release is `1.5.8-nes.patch.1` and is published to the internal Nexus RELEASE repository under:
+
+[source,text]
+----
+cn.bjca.footstone.bpring.security:bjca-footstone-bpring-security-oauth2-authorization-server:1.5.8-nes.patch.1
+----
+
+It requires the verified internal RELEASE BOMs
+`cn.bjca.footstone.bpring:bjca-footstone-bpring-framework-bom:6.2.19-nes.patch.1` and
+`cn.bjca.footstone.bpring.security:bjca-footstone-bpring-security-bom:6.5.11-nes.patch.1`.
+The release has no explicit publication exclusions.
+
+Before deployment, generate the publication locally without cleaning or running tests:
+
+[source,bash]
+----
+JAVA_TOOL_OPTIONS=-Dfile.encoding=UTF-8 GRADLE_OPTS='-Xmx4g -Dfile.encoding=UTF-8 -Dorg.gradle.workers.max=3' ./gradlew publishToMavenLocal -x test -x asciidoctor -x javadoc --max-workers=3
+----
+
+Scan every generated POM for internal SNAPSHOT versions and verify the complete target publication set is absent from the Nexus RELEASE repository before the coordinator performs the single deployment.
+
 == Building from Source
 Spring Authorization Server uses a https://gradle.org[Gradle]-based build system.
 In the instructions below, https://vimeo.com/34436402[`./gradlew`] is invoked from the root of the source tree and serves as

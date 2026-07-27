@@ -7,8 +7,8 @@ context: |
   构建：Makefile + 本地 ~/dev/gradle-8.14.5，发布到 Nexus 私服
   约束：不改 package/类名；通过 GAV 重命名规避 SCA；注释优先中文
   内部 BOM：
-    cn.bjca.footstone.bpring:bjca-footstone-bpring-framework-bom:6.2.19-nes.patch.1-SNAPSHOT
-    cn.bjca.footstone.bpring.security:bjca-footstone-bpring-security-bom:6.5.11-nes.patch.1-SNAPSHOT
+    cn.bjca.footstone.bpring:bjca-footstone-bpring-framework-bom:6.2.19-nes.patch.1
+    cn.bjca.footstone.bpring.security:bjca-footstone-bpring-security-bom:6.5.11-nes.patch.1
 
 rules:
   proposal:
