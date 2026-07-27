@@ -77,3 +77,36 @@ external Jackson/Nimbus RELEASEs. No internal SNAPSHOT was selected.
 - Target-version scan: no active configuration or component documentation references `0.4.5-nes.patch.1-SNAPSHOT`, `5.3.39-nes.patch.1-SNAPSHOT`, or `5.8.16-nes.patch.1-SNAPSHOT`. The previous component version above is retained only as baseline evidence.
 - Credential scan: no credential value, authorization header, or token was added. Existing documentation names user-level Gradle property keys only.
 - Reviewed changes are limited to release version metadata, the three required component documents, and this component OpenSpec change. No source file, build logic, or local tool directory was modified.
+
+## Release commit and Nexus publication
+
+The dedicated release commit is
+`f46ffcc0c73dab60baee17aae188271ff95fb042`. It contains only the approved
+version and internal RELEASE dependency updates, component documentation, and
+this OpenSpec change. The tracked worktree was clean at deployment time and
+HEAD matched the recorded release commit.
+
+Immediately before deployment, the target POM and JAR both returned HTTP 404
+from Nexus RELEASE. The coordinator then ran the incremental Gradle Nexus
+publication once, without `clean`, project tests, Asciidoctor, or Javadoc. It
+completed successfully in `2m 22s`. The release was not redeployed.
+
+Post-deployment verification downloaded the complete publication set, which is
+exactly one POM and one JAR. Both assets are valid, and the remote POM contains
+zero internal `cn.bjca.footstone` SNAPSHOT references:
+
+- POM URL: `http://192.168.131.36:8088/repository/releases/cn/bjca/footstone/bpring/security/bjca-footstone-bpring-security-oauth2-authorization-server/0.4.5-nes.patch.1/bjca-footstone-bpring-security-oauth2-authorization-server-0.4.5-nes.patch.1.pom`
+- POM SHA-256: `96b35aefeaf77de06d6a7e7db8716ba38a054c68784db92677ff12b4e138df5d`
+- JAR URL: `http://192.168.131.36:8088/repository/releases/cn/bjca/footstone/bpring/security/bjca-footstone-bpring-security-oauth2-authorization-server/0.4.5-nes.patch.1/bjca-footstone-bpring-security-oauth2-authorization-server-0.4.5-nes.patch.1.jar`
+- JAR SHA-256: `a8a8abbc6e2790cb45391c861a9953a47186028931cb8d3fc4dc22f7ebd5cdb5`
+
+An isolated RELEASE-only consumer completed successfully in `22.076s`. It
+resolved Authorization Server `0.4.5-nes.patch.1`, Security
+`5.8.16-nes.patch.1`, and Framework `5.3.39-nes.patch.1`, with snapshots
+disabled and no internal SNAPSHOT selected.
+
+Annotated tag `v0.4.5-nes.patch.1` was created locally after Nexus verification.
+Tag object `ed31452eb14e89f3274e1f9a32782373dc75d8ff` peels exactly to the release
+commit. GitHub commit/tag push and remote verification remain pending because
+the known `github.com:443` connectivity blocker persists; Nexus must not be
+redeployed when the Git operation is retried.
