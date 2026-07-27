@@ -97,3 +97,40 @@ proxy, the representative dependency-tree consumer completed successfully in
 `3.090s`. It resolved Authorization Server `1.5.8-nes.patch.1`, Security
 `6.5.11-nes.patch.1`, and Framework `6.2.19-nes.patch.1`, with no internal
 SNAPSHOT selected.
+
+## Release commit and Nexus publication
+
+The dedicated release commit is
+`e3a72af355dffe36f496953e68886759fee5eb18`. Immediately before deployment,
+the complete target publication set was checked again: its POM and JAR both
+returned HTTP 404 from Nexus RELEASE.
+
+The repository `make deploy` target depends on `clean`, so the coordinator used
+the equivalent incremental publication task directly:
+
+```text
+JAVA_HOME=/Users/anan/.sdkman/candidates/java/17.0.17-amzn JAVA_TOOL_OPTIONS=-Dfile.encoding=UTF-8 GRADLE_OPTS='-Xmx4g -Dfile.encoding=UTF-8 -Dorg.gradle.workers.max=3' ./gradlew publishAllPublicationsToNexusRepository -x test -x asciidoctor -x javadoc --max-workers=3
+```
+
+It was executed once from the release commit and completed successfully in
+`6s`: 12 actionable tasks, 3 executed and 9 up-to-date. It did not run `clean`,
+project tests, Asciidoctor, or Javadoc.
+
+Post-deployment verification downloaded the complete publication set from
+Nexus RELEASE. The remote POM contains zero internal SNAPSHOT references:
+
+- POM URL: `http://192.168.131.36:8088/repository/releases/cn/bjca/footstone/bpring/security/bjca-footstone-bpring-security-oauth2-authorization-server/1.5.8-nes.patch.1/bjca-footstone-bpring-security-oauth2-authorization-server-1.5.8-nes.patch.1.pom`
+- POM SHA-256: `d41188f7f6466e4160ea194dfb4ffeaaec9691b558a4ed479de98764f89eeea3`
+- JAR URL: `http://192.168.131.36:8088/repository/releases/cn/bjca/footstone/bpring/security/bjca-footstone-bpring-security-oauth2-authorization-server/1.5.8-nes.patch.1/bjca-footstone-bpring-security-oauth2-authorization-server-1.5.8-nes.patch.1.jar`
+- JAR SHA-256: `5098b8461095f5882623625ac937fac4e7bc1c77228b019973c6f3ee03826d06`
+
+An isolated Maven consumer with a fresh local repository and snapshots disabled
+resolved the complete graph from Nexus in `15.408s`. It selected Authorization
+Server `1.5.8-nes.patch.1`, Security `6.5.11-nes.patch.1`, and Framework
+`6.2.19-nes.patch.1`, with no internal SNAPSHOT.
+
+Annotated tag `v1.5.8-nes.patch.1` was created locally after Nexus verification.
+Tag object `2d2aab333a6a3cc7aab01e755180e8892c763d1d` peels exactly to the release
+commit. GitHub commit/tag push and remote verification remain pending because
+the known `github.com:443` connectivity blocker persists; Nexus must not be
+redeployed when the Git operation is retried.
