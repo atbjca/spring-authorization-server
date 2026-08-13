@@ -21,9 +21,19 @@ plugins {
 
 dependencyResolutionManagement {
 	repositories {
+		mavenLocal()
 		maven {
 			name = 'nexus'
 			url = nexusPublicUrl
+			allowInsecureProtocol = true
+			credentials {
+				username = nexusUsername
+				password = nexusPassword
+			}
+		}
+		maven {
+			name = 'nexusSnapshot'
+			url = nexusSnapshotUrl
 			allowInsecureProtocol = true
 			credentials {
 				username = nexusUsername

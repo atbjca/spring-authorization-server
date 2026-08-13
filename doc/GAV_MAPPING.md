@@ -6,7 +6,7 @@
 
 | 原始模块 (artifactId)                           | 新模块 (artifactId)                                                         | 新 GroupId                            | 新 Version                     |
 | :---------------------------------------------- | :-------------------------------------------------------------------------- | :------------------------------------ | :----------------------------- |
-| `spring-security-oauth2-authorization-server` | `bjca-footstone-bpring-security-oauth2-authorization-server`              | `cn.bjca.footstone.bpring.security` | `0.4.5-nes.patch.1` |
+| `spring-security-oauth2-authorization-server` | `bjca-footstone-bpring-security-oauth2-authorization-server`              | `cn.bjca.footstone.bpring.security` | `0.4.5-nes.patch.2-SNAPSHOT` |
 
 > [!NOTE]
 > 在本项目的 `settings.gradle` 中，模块名已动态映射。
@@ -37,8 +37,8 @@
 例如：`org.springframework:spring-core` → `cn.bjca.footstone.bpring:bjca-footstone-bpring-core:5.3.39-nes.patch.1`
 
 Spring Security 依赖由 BOM
-`cn.bjca.footstone.bpring.security:bjca-footstone-bpring-security-bom:5.8.16-nes.patch.1`
-统一约束。两个上游 BOM 均必须从 Nexus RELEASE 解析，禁止回退到内部 SNAPSHOT。
+`cn.bjca.footstone.bpring.security:bjca-footstone-bpring-security-bom:5.8.16-nes.patch.2-SNAPSHOT`
+统一约束。当前开发线用该 SNAPSHOT 做功能验证；正式发版时两个上游 BOM 仍必须从 Nexus RELEASE 解析，禁止把内部 SNAPSHOT 写进 RELEASE 元数据。上一不可变 RELEASE 仍是 `0.4.5-nes.patch.1`（当时消费 `5.8.16-nes.patch.1`）。
 
 ## 4. 发布与验证约束
 

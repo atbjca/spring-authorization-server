@@ -56,3 +56,4 @@
 | 2026-03-05 | 构建/模块命名 | `settings.gradle` 动态重命名子项目后，同步修正 samples/docs 对 `project()` 路径的引用，并补齐 Authorization Server 模块的编译期依赖以保证构建通过。 |
 | 2026-03-06 | 依赖安全升级 | 将 `dependencies/spring-authorization-server-dependencies.gradle` 中 `com.fasterxml.jackson:jackson-bom` 从 `2.14.3` 升级到 `2.15.4`，用于修复已知安全漏洞风险。 |
 | 2026-06-25 | 依赖安全升级（第二轮） | 升级 `jackson-bom` 至 `2.18.7`、`nimbus-jose-jwt` 至 `10.9.1`、`json-path` 至 `2.9.0`、`assertj-core` 至 `3.27.7`，并显式约束 `bouncycastle` >= `1.79`。补齐 6 份 CVE 技术文档。 |
+| 2026-08-13 | 开发线推进 | 版本推进到 `0.4.5-nes.patch.2-SNAPSHOT`，Security BOM 开发期改为 `5.8.16-nes.patch.2-SNAPSHOT` 以便功能验证，Bouncy Castle 约束对齐到 `1.84`。正式发版仍须等 Security `5.8.16-nes.patch.2` RELEASE。 |

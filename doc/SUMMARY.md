@@ -1,8 +1,25 @@
 # Spring Authorization Server 0.4.x 安全补丁 — 阶段性总结
 
-## RELEASE 0.4.5-nes.patch.1
+## 当前开发线 0.4.5-nes.patch.2-SNAPSHOT
 
-当前发布版本为 `0.4.5-nes.patch.1`，目标仓库为 Nexus RELEASE：
+维护分支已离开不可变 RELEASE `0.4.5-nes.patch.1`，当前开发版本为 `0.4.5-nes.patch.2-SNAPSHOT`。开发期消费 Spring Security `5.8.16-nes.patch.2-SNAPSHOT` 做功能验证。禁止把本 SNAPSHOT 部署到 RELEASE 仓库，也禁止复用已发布的 patch.1 坐标。下一正式版仍须等 Security `5.8.16-nes.patch.2` 进入 Nexus RELEASE。
+
+当前开发坐标：
+
+| 类型 | GAV |
+|------|-----|
+| JAR | `cn.bjca.footstone.bpring.security:bjca-footstone-bpring-security-oauth2-authorization-server:0.4.5-nes.patch.2-SNAPSHOT` |
+
+下一 SAS RELEASE 要求的内部上游：
+
+- Spring Framework BOM：`cn.bjca.footstone.bpring:bjca-footstone-bpring-framework-bom:5.3.39-nes.patch.1`
+- Spring Security BOM：`cn.bjca.footstone.bpring.security:bjca-footstone-bpring-security-bom:5.8.16-nes.patch.2-SNAPSHOT`
+
+Bouncy Castle 显式约束已与 Security patch.2 对齐为 `1.84` `jdk18on`。nimbus `10.9.1` 与 jackson-bom `2.18.7` 保持不变。
+
+## 历史 RELEASE 0.4.5-nes.patch.1
+
+上一不可变发布版本为 `0.4.5-nes.patch.1`，目标仓库为 Nexus RELEASE：
 `http://192.168.131.36:8088/repository/releases`。
 
 完整发布集合：
@@ -13,7 +30,7 @@
 
 `dependencies` 工程只提供构建约束，未应用 `maven-publish`，因此不生成 RELEASE BOM。
 
-内部上游仅允许使用已发布的 RELEASE：
+该 RELEASE 当时消费的内部上游：
 
 - Spring Framework BOM：`cn.bjca.footstone.bpring:bjca-footstone-bpring-framework-bom:5.3.39-nes.patch.1`
 - Spring Security BOM：`cn.bjca.footstone.bpring.security:bjca-footstone-bpring-security-bom:5.8.16-nes.patch.1`
@@ -173,7 +190,7 @@ JAVA_TOOL_OPTIONS=-Dfile.encoding=UTF-8 GRADLE_OPTS='-Xmx3g -Dfile.encoding=UTF-
 |------|--------|--------|----------|
 | `jackson-bom` | 2.15.4 | 2.18.7 | CVE-2025-52999、GHSA-72hv-8253-57qq |
 | `nimbus-jose-jwt` | 10.8 | 10.9.1 | CVE-2023-52428、CVE-2025-53864 |
-| `bcprov-jdk18on` / `bcpkix-jdk18on` | （传递依赖） | 1.79 | CVE-2025-8916 |
+| `bcprov-jdk18on` / `bcpkix-jdk18on` | （传递依赖） | 1.84 | CVE-2025-8916 |
 | `json-path` | 2.7.0 | 2.9.0 | CVE-2023-51074 |
 | `assertj-core` | 3.23.1 | 3.27.7 | CVE-2026-24400 |
 

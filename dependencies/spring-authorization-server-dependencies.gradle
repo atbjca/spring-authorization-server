@@ -15,9 +15,9 @@ dependencies {
 	api platform("com.fasterxml.jackson:jackson-bom:2.18.7")
 	constraints {
 		api "com.nimbusds:nimbus-jose-jwt:10.9.1"
-		// CVE-2025-8916：nimbus-jose-jwt 传递依赖的 Bouncy Castle 需 >= 1.79
-		api "org.bouncycastle:bcprov-jdk18on:1.79"
-		api "org.bouncycastle:bcpkix-jdk18on:1.79"
+		// CVE-2025-8916：最低修复版本 1.79；与 Security 5.8.16-nes.patch.2-SNAPSHOT 发布基线对齐到 1.84
+		api "org.bouncycastle:bcprov-jdk18on:1.84"
+		api "org.bouncycastle:bcpkix-jdk18on:1.84"
 		api "javax.servlet:javax.servlet-api:4.0.1"
 		api "org.junit.jupiter:junit-jupiter:5.9.3"
 		// CVE-2026-24400：AssertJ isXmlEqualTo XXE 漏洞，仅影响测试依赖

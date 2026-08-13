@@ -8,18 +8,20 @@ The Spring Authorization Server project, led by the https://spring.io/projects/s
 
 This project replaces the Authorization Server support provided by https://spring.io/projects/spring-security-oauth/[Spring Security OAuth].
 
-== NES RELEASE 0.4.5-nes.patch.1
+== NES development line 0.4.5-nes.patch.2-SNAPSHOT
 
-This branch prepares the immutable internal RELEASE `0.4.5-nes.patch.1` for the Nexus `releases` repository at `http://192.168.131.36:8088/repository/releases`.
+This branch has left the immutable RELEASE `0.4.5-nes.patch.1` and now develops `0.4.5-nes.patch.2-SNAPSHOT`. It consumes the current Spring Security development coordinate `5.8.16-nes.patch.2-SNAPSHOT` for functional verification. Do not deploy this SNAPSHOT, and do not reuse the published patch.1 coordinate. The next SAS RELEASE still requires Security `5.8.16-nes.patch.2` in Nexus `releases` at `http://192.168.131.36:8088/repository/releases`.
 
-Published coordinate:
+Current development coordinate:
 
-* `cn.bjca.footstone.bpring.security:bjca-footstone-bpring-security-oauth2-authorization-server:0.4.5-nes.patch.1` (JAR)
+* `cn.bjca.footstone.bpring.security:bjca-footstone-bpring-security-oauth2-authorization-server:0.4.5-nes.patch.2-SNAPSHOT` (JAR)
 
-Required internal RELEASE dependencies:
+Required internal dependencies for the next SAS RELEASE:
 
 * `cn.bjca.footstone.bpring:bjca-footstone-bpring-framework-bom:5.3.39-nes.patch.1`
-* `cn.bjca.footstone.bpring.security:bjca-footstone-bpring-security-bom:5.8.16-nes.patch.1`
+* `cn.bjca.footstone.bpring.security:bjca-footstone-bpring-security-bom:5.8.16-nes.patch.2-SNAPSHOT`
+
+The last immutable SAS RELEASE remains `0.4.5-nes.patch.1`, which consumed Security `5.8.16-nes.patch.1`.
 
 There are no publication exclusions. To prepare all publications incrementally in the local Maven repository without cleaning or rerunning tests:
 
